@@ -104,8 +104,11 @@ git clone https://github.com/your-username/bitscope.git
 cd bitscope
 pnpm install
 pnpm dev
+ ``` 
+ 
+http://localhost:3000
 
-Open: http://localhost:3000
+
 
 ## Usage Examples
 
