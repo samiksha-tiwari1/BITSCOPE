@@ -1,9 +1,13 @@
-const API = "http://localhost:4000";
+const API =
+  process.env.NEXT_PUBLIC_API_URL ||
+  "http://localhost:4000";
 
 // Generic safe fetch with retry and proper typing
 async function safeFetch<T>(path: string, retries = 2): Promise<T[]> {
   try {
-    const res = await fetch(`${API}${path}`);
+    const res = await fetch(`${API}${path}`, {
+      cache: "no-store",
+    });
 
     if (!res.ok) {
       throw new Error(`API ${res.status}`);
@@ -43,7 +47,9 @@ export function getMempool() {
 }
 
 export async function getTx(id: string) {
-  const res = await fetch(`${API}/tx/${id}`);
+  const res = await fetch(`${API}/tx/${id}`, {
+    cache: "no-store",
+  });
 
   if (!res.ok) {
     throw new Error("Transaction not found");
