@@ -35,7 +35,7 @@ Powered by the Blockstream public API and built with a modern frontend stack, Bi
 ![Mempool Intelligence](assets/Mempool.png)
 
 ### Transaction View
-![Transaction View](assets/Transactioons.png)
+![Transaction View](assets/Transactions.png)
 
 
 ---
