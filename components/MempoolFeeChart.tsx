@@ -11,39 +11,39 @@ import {
   CartesianGrid,
 } from "recharts";
 
-/* ---------- Types ---------- */
-
-type MempoolTx = {
-  fee: number;
-  vsize: number;
-};
-
 type Bucket = {
   range: string;
   count: number;
 };
 
-/* ---------- Component ---------- */
+function satPerVByte(fee: number, vsize: number) {
+  return Math.round(fee / vsize);
+}
 
 export default function MempoolFeeChart() {
   const [data, setData] = useState<Bucket[]>([]);
 
   useEffect(() => {
-    const load = async () => {
+    async function load() {
       try {
-        const res = await fetch(
-          "https://blockstream.info/api/mempool/recent",
-          { cache: "no-store" }
+        // Get recent mempool tx ids
+        const idsRes = await fetch(
+          "https://blockstream.info/api/mempool/txids"
         );
+        const ids: string[] = await idsRes.json();
 
-        const raw = await res.json();
+        // Small sample for speed and reliability
+        const sampleIds = ids.slice(0, 35);
 
-        // Blockstream sometimes returns different shapes
-        const txs: MempoolTx[] = Array.isArray(raw)
-          ? raw
-          : Array.isArray(raw?.txs)
-          ? raw.txs
-          : [];
+        // Fetch real tx details (fee + vsize)
+        const txs = await Promise.all(
+          sampleIds.map(async (id) => {
+            const r = await fetch(
+              `https://blockstream.info/api/tx/${id}`
+            );
+            return r.json();
+          })
+        );
 
         const buckets: Record<string, number> = {
           "0-5": 0,
@@ -54,9 +54,9 @@ export default function MempoolFeeChart() {
         };
 
         for (const tx of txs) {
-          if (!tx?.vsize) continue;
+          if (!tx?.fee || !tx?.vsize) continue;
 
-          const spv = tx.fee / tx.vsize;
+          const spv = satPerVByte(tx.fee, tx.vsize);
 
           if (spv <= 5) buckets["0-5"]++;
           else if (spv <= 20) buckets["6-20"]++;
@@ -71,15 +71,12 @@ export default function MempoolFeeChart() {
             count,
           }))
         );
-      } catch (e) {
-        console.error("Failed to load mempool chart", e);
+      } catch (error) {
+        console.error("Failed to load mempool chart", error);
       }
-    };
+    }
 
     load();
-
-    const interval = setInterval(load, 15000);
-    return () => clearInterval(interval);
   }, []);
 
   return (
@@ -94,7 +91,11 @@ export default function MempoolFeeChart() {
           <XAxis dataKey="range" />
           <YAxis />
           <Tooltip />
-          <Bar dataKey="count" fill="#22d3ee" radius={[6, 6, 0, 0]} />
+          <Bar
+            dataKey="count"
+            fill="#22d3ee"
+            radius={[6, 6, 0, 0]}
+          />
         </BarChart>
       </ResponsiveContainer>
     </div>

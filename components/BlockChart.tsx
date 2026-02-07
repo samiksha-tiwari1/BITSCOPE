@@ -13,7 +13,8 @@ import {
 } from "recharts";
 
 type Block = {
-  tx_count?: number;
+  height: number;
+  tx_count: number;
 };
 
 type ChartPoint = {
@@ -21,38 +22,37 @@ type ChartPoint = {
   txs: number;
 };
 
+const API = process.env.NEXT_PUBLIC_API_URL as string;
+
 export default function BlockChart() {
   const [data, setData] = useState<ChartPoint[]>([]);
 
   useEffect(() => {
-    const load = async () => {
+    async function load() {
       try {
-        const res = await fetch(
-          "https://blockstream.info/api/blocks",
-          { cache: "no-store" }
-        );
+        const res = await fetch(`${API}/blocks`, {
+          cache: "no-store",
+        });
 
-        const raw = await res.json();
+        const blocks: Block[] = await res.json();
 
-        if (!Array.isArray(raw)) return;
+        if (!Array.isArray(blocks)) return;
 
-        const formatted: ChartPoint[] = raw
+        const formatted = blocks
           .slice(0, 30)
-          .map((b: Block, i: number) => ({
+          .map((b, i) => ({
             index: i,
-            txs: b?.tx_count ?? 0,
+            txs: b.tx_count,
           }))
           .reverse();
 
         setData(formatted);
-      } catch (e) {
-        console.error("Failed to load block chart", e);
+      } catch (err) {
+        console.error("Failed to load blocks chart", err);
       }
-    };
+    }
 
     load();
-    const interval = setInterval(load, 20000);
-    return () => clearInterval(interval);
   }, []);
 
   if (data.length === 0) return null;
@@ -63,11 +63,9 @@ export default function BlockChart() {
   );
 
   return (
-    <div className="card-elevated animate-slideUp rounded-xl p-8 mb-10 relative overflow-hidden">
-      <div className="glow-bg -top-20 left-1/2 -translate-x-1/2 absolute" />
-
+    <div className="card-elevated rounded-xl p-8 mb-10 relative overflow-hidden">
       <div className="flex justify-between items-center mb-6">
-        <h3 className="cinematic-title text-2xl mb-2">
+        <h3 className="text-2xl font-semibold">
           Transaction Throughput
         </h3>
 
