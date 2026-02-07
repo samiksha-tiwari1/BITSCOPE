@@ -7,6 +7,14 @@
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind-v4-38B2AC)
 ![License](https://img.shields.io/badge/License-MIT-green)
 
+
+---
+
+## Live Demo
+
+Frontend: https://bitscope-256skboh-samiksha-tiwari-projects.vercel.app
+Backend: https://bitscope-server.onrender.com
+
 ---
 
 ## Overview
@@ -15,23 +23,20 @@ BitScope reimagines how Bitcoin data is explored. Instead of dense tables and ra
 
 Powered by the Blockstream public API and built with a modern frontend stack, BitScope feels like a Bitcoin intelligence dashboard rather than a traditional block explorer.
 
+
 ---
 
+## Screenshots
 
-## Why BitScope Exists
+### Home Dashboard
+![Home Dashboard](assets/homepage.png)
 
-Most Bitcoin explorers show data.
+### Mempool Intelligence
+![Mempool Intelligence](assets/Mempool.png)
 
-**BitScope shows insight.**
+### Transaction View
+![Transaction View](assets/Transactioons.png)
 
-It transforms noisy blockchain APIs into:
-
-- Clean data shapes
-- Stable data handling
-- Visual analytics instead of raw tables
-- A fintech-grade UI experience for blockchain exploration
-
-This project demonstrates practical skills in data visualization, API handling, and modern UI architecture applied to real-time Bitcoin data.
 
 ---
 
@@ -82,21 +87,8 @@ This project demonstrates practical skills in data visualization, API handling, 
 ## Architecture
 
     app/
-      address/
-      block/
-      blocks/
-      mempool/
-      tx/
     components/
-      AddressDashboard.tsx
-      TransactionDashboard.tsx
-      LatestBlocks.tsx
-      MempoolFeed.tsx
-      MempoolFeeChart.tsx
-      Navbar.tsx
-      ThemeToggle.tsx
-
-
+      
 ---
 
 ## Data Flow
@@ -107,18 +99,6 @@ BitScope focuses on transforming raw blockchain responses into structured, human
 
 ---
 
-## Screenshots
-
-### Home Dashboard
-![Home Dashboard](assets/homepage.png)
-
-### Mempool Intelligence
-![Mempool Intelligence](assets/Mempool.png)
-
-### Transaction View
-![Transaction View](assets/Transactioons.png)
-
----
 
 ## Getting Started
 
@@ -128,41 +108,60 @@ BitScope focuses on transforming raw blockchain responses into structured, human
 BitScope consists of:
 
 - **Frontend** — Next.js dashboard
-- **Backend** — Node.js/Express server that fetches and normalizes Blockstream API data
+- **Backend** — Express API that normalizes Blockstream data
 
-Both must run together for the app to work correctly.
+Both must run together.
 
 ---
 
-### 1) Start the Backend Server
+### 1) Start the Backend Server(Local)
 
 ```bash
+git clone https://github.com/samiksha-tiwari1/bitscope-server.git
 cd bitscope-server
 npm install
-node server.js 
+node server.js
   ```
 
 Backend runs at: http://localhost:4000
 
 
-### 2) Start the Frontend Server
+### 2) Start the Frontend Server(Local)
 
 ```bash
-git clone https://github.com/your-username/bitscope.git
+git clone https://github.com/samiksha-tiwari1/bitscope.git
 cd bitscope
 pnpm install
-pnpm dev 
+```
 
+### Create a .env.local file in the root:
+
+
+NEXT_PUBLIC_API_URL=http://localhost:4000
+
+```bash
+pnpm dev
 ```
 
 Frontend runs at: http://localhost:3000
 
 
-## Backend API
+---
 
-BitScope uses a separate API server:
+## Environment Variables (Production / Deployed)
 
-https://github.com/samiksha-tiwari1/bitscope-server
+Create a `.env.local` file:
+
+NEXT_PUBLIC_API_URL=https://bitscope-server.onrender.com
+
+---
+
+## Deployment
+
+Frontend deployed on Vercel.  
+Backend deployed on Render.
+
+---
 
 
 ## Usage Examples
@@ -172,21 +171,6 @@ You can explore BitScope by searching:
 - **Block height:** 840000
 - **Any transaction hash**
 - **Bitcoin Genesis address:** 1A1zP1eP5QGefi2DMPTfTL5SLmv7DivfNa
-
----
-
-## What Makes BitScope Different
-
-Traditional explorers show raw blockchain data.
-
-**BitScope shows blockchain intelligence** through visualization and thoughtful UI.
-
-Designed for:
-
-- Security analysts
-- Blockchain researchers
-- Developers
-- Hackathon judges and recruiters
 
 ---
 
@@ -201,15 +185,6 @@ Designed for:
 
 ---
 
-## What This Project Demonstrates
-
-- Real-time blockchain data visualization
-- Clean UI architecture with Tailwind design system
-- Transforming raw APIs into meaningful dashboards
-- Designing analyst-friendly interfaces over complex data
-- Practical use of Next.js App Router with TypeScript
-
----
 
 ## Contributing
 
