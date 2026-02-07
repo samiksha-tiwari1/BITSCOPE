@@ -1,6 +1,4 @@
-const API =
-  process.env.NEXT_PUBLIC_API_URL ||
-  "http://localhost:4000";
+const API = process.env.NEXT_PUBLIC_API_URL as string;
 
 // Generic safe fetch with retry and proper typing
 async function safeFetch<T>(path: string, retries = 2): Promise<T[]> {
