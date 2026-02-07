@@ -12,11 +12,6 @@ import {
   Area,
 } from "recharts";
 
-type BlockAPI = {
-  height: number;
-  tx_count: number;
-};
-
 type ChartPoint = {
   index: number;
   txs: number;
@@ -28,9 +23,11 @@ export default function BlockChart() {
   useEffect(() => {
     async function load() {
       const res = await fetch("https://blockstream.info/api/blocks");
-      const blocks: BlockAPI[] = await res.json();
+      const blocks = await res.json();
 
-      const formatted: ChartPoint[] = blocks
+      if (!Array.isArray(blocks)) return;
+
+      const formatted = blocks
         .slice(0, 30)
         .map((b, i) => ({
           index: i,
@@ -52,22 +49,30 @@ export default function BlockChart() {
   );
 
   return (
-    <div className="card-elevated rounded-xl p-8 mb-10 relative overflow-hidden">
-      {/* Glow */}
-      <div className="absolute -top-24 left-1/2 -translate-x-1/2 w-96 h-72 bg-cyan-500/10 blur-3xl pointer-events-none" />
+    <div className="card-elevated animate-slideUp rounded-xl p-8 mb-10 relative overflow-hidden">
+      {/* Glow background */}
+      <div className="glow-bg -top-20 left-1/2 -translate-x-1/2 absolute" />
 
       {/* Header */}
       <div className="flex justify-between items-center mb-6">
-        <h3 className="text-xl font-semibold">
+        <h3 className="cinematic-title text-2xl mb-2">
           Transaction Throughput
         </h3>
 
         <div className="text-right text-sm text-muted-foreground">
           <div>
-            Latest <span className="text-primary font-semibold">{latest.toLocaleString()}</span> txs
+            Latest{" "}
+            <span className="text-primary font-semibold">
+              {latest.toLocaleString()}
+            </span>{" "}
+            txs
           </div>
           <div>
-            Average <span className="text-primary font-semibold">{avg.toLocaleString()}</span> txs
+            Average{" "}
+            <span className="text-primary font-semibold">
+              {avg.toLocaleString()}
+            </span>{" "}
+            txs
           </div>
         </div>
       </div>
@@ -75,7 +80,7 @@ export default function BlockChart() {
       <ResponsiveContainer width="100%" height={280}>
         <LineChart data={data}>
           <CartesianGrid
-            stroke="rgba(255,255,255,0.04)"
+            stroke="rgba(255,255,255,0.05)"
             vertical={false}
           />
 
@@ -88,16 +93,15 @@ export default function BlockChart() {
 
           <Tooltip
             contentStyle={{
-              background: "#0b0b0f",
-              border: "1px solid #1f1f25",
-              borderRadius: "8px",
+              background: "#0b0f14",
+              border: "1px solid #1e293b",
+              borderRadius: "10px",
             }}
-            labelStyle={{ color: "#9ca3af" }}
           />
 
           <defs>
             <linearGradient id="colorTx" x1="0" y1="0" x2="0" y2="1">
-              <stop offset="0%" stopColor="#22d3ee" stopOpacity={0.4} />
+              <stop offset="0%" stopColor="#22d3ee" stopOpacity={0.5} />
               <stop offset="100%" stopColor="#22d3ee" stopOpacity={0} />
             </linearGradient>
           </defs>

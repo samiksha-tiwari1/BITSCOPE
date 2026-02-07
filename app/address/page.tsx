@@ -1,5 +1,10 @@
+import PageSection from "@/components/PageSection";
 import AddressDashboard from "@/components/AddressDashboard";
 
 export default function AddressPage() {
-  return <AddressDashboard />;
+  return (
+    <PageSection>
+      <AddressDashboard />
+    </PageSection>
+  );
 }

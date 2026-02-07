@@ -1,13 +1,16 @@
-import BlocksList from "@/components/BlocksList";
+import PageSection from "@/components/PageSection";
 import BlockChart from "@/components/BlockChart";
+import BlocksList from "@/components/BlocksList";
 
 export default function BlocksPage() {
   return (
-    <main className="min-h-screen bg-background text-foreground p-6">
-      <div className="max-w-6xl mx-auto space-y-8">
-        <BlockChart />
+    <PageSection>
+      <BlockChart />
+
+      <div className="card-elevated rounded-xl p-6">
+        <h2 className="text-xl font-semibold mb-6">Latest Blocks</h2>
         <BlocksList />
       </div>
-    </main>
+    </PageSection>
   );
 }

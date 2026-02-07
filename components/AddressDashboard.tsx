@@ -94,7 +94,7 @@ export default function AddressForm() {
       <div className="max-w-5xl mx-auto space-y-10 relative">
         {/* Header */}
         <div className="space-y-3">
-          <h1 className="text-4xl font-semibold tracking-tight">
+          <h1 className="cinematic-title text-4xl mb-2">
             Bitcoin Address Intelligence
           </h1>
           <p className="text-muted-foreground max-w-2xl">

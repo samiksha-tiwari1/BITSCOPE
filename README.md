@@ -17,6 +17,24 @@ Powered by the Blockstream public API and built with a modern frontend stack, Bi
 
 ---
 
+
+## Why BitScope Exists
+
+Most Bitcoin explorers show data.
+
+**BitScope shows insight.**
+
+It transforms noisy blockchain APIs into:
+
+- Clean data shapes
+- Stable data handling
+- Visual analytics instead of raw tables
+- A fintech-grade UI experience for blockchain exploration
+
+This project demonstrates practical skills in data visualization, API handling, and modern UI architecture applied to real-time Bitcoin data.
+
+---
+
 ## Key Features
 
 ### Transaction Intelligence
@@ -78,35 +96,66 @@ Powered by the Blockstream public API and built with a modern frontend stack, Bi
       Navbar.tsx
       ThemeToggle.tsx
 
+
+---
+
+## Data Flow
+
+Browser → Next.js → Blockstream API
+
+BitScope focuses on transforming raw blockchain responses into structured, human-readable visual dashboards without overwhelming the user with raw data tables.
+
 ---
 
 ## Screenshots
 
-_Add screenshots here_
+### Home Dashboard
+![Home Dashboard](assets/homepage.png)
 
-- Transaction Flow View
-- Address Intelligence Dashboard
-- Mempool Fee Chart
-- Latest Blocks Feed
+### Mempool Intelligence
+![Mempool Intelligence](assets/Mempool.png)
+
+### Transaction View
+![Transaction View](assets/Transactioons.png)
 
 ---
 
 ## Getting Started
 
-### Prerequisites
-- Node.js 18+
-- pnpm / npm / yarn
 
-### Installation
+## Running BitScope Locally (Frontend + Backend)
+
+BitScope consists of:
+
+- **Frontend** — Next.js dashboard
+- **Backend** — Node.js/Express server that fetches and normalizes Blockstream API data
+
+Both must run together for the app to work correctly.
+
+---
+
+### 1) Start the Backend Server
+
+```bash
+cd bitscope-server
+npm install
+node server.js 
+  ```
+
+Backend runs at: http://localhost:4000
+
+
+### 2) Start the Frontend Server
 
 ```bash
 git clone https://github.com/your-username/bitscope.git
 cd bitscope
 pnpm install
-pnpm dev
- ``` 
- 
-http://localhost:3000
+pnpm dev 
+
+```
+
+Frontend runs at: http://localhost:3000
 
 
 
@@ -146,6 +195,16 @@ Designed for:
 
 ---
 
+## What This Project Demonstrates
+
+- Real-time blockchain data visualization
+- Clean UI architecture with Tailwind design system
+- Transforming raw APIs into meaningful dashboards
+- Designing analyst-friendly interfaces over complex data
+- Practical use of Next.js App Router with TypeScript
+
+---
+
 ## Contributing
 
 Contributions are welcome.
@@ -155,3 +214,10 @@ Contributions are welcome.
 3. Submit a pull request with a clear description
 
 Ensure code is typed, formatted, and consistent with the existing structure.
+
+---
+
+## Author
+
+**Samiksha Tiwari**  
+Computer Science Student 
