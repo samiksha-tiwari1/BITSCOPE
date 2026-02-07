@@ -158,6 +158,12 @@ pnpm dev
 Frontend runs at: http://localhost:3000
 
 
+## Backend API
+
+BitScope uses a separate API server:
+
+https://github.com/samiksha-tiwari1/bitscope-server
+
 
 ## Usage Examples
 
