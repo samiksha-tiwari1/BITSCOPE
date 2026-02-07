@@ -23,58 +23,63 @@ type Bucket = {
   count: number;
 };
 
-/* ---------- Helpers ---------- */
-
-function satPerVByte(fee: number, vsize: number) {
-  return Math.round(fee / vsize);
-}
-
 /* ---------- Component ---------- */
 
 export default function MempoolFeeChart() {
   const [data, setData] = useState<Bucket[]>([]);
 
   useEffect(() => {
-    async function load() {
-      const res = await fetch(
-        "https://blockstream.info/api/mempool/recent"
-      );
-      const raw: unknown = await res.json();
+    const load = async () => {
+      try {
+        const res = await fetch(
+          "https://blockstream.info/api/mempool/recent",
+          { cache: "no-store" }
+        );
 
-      // Normalize response shape safely
-      const txs: MempoolTx[] = Array.isArray(raw)
-        ? raw
-        : Array.isArray((raw as { txs?: unknown }).txs)
-        ? ((raw as { txs: MempoolTx[] }).txs)
-        : [];
+        const raw = await res.json();
 
-      const buckets: Record<string, number> = {
-        "0-5": 0,
-        "6-20": 0,
-        "21-50": 0,
-        "51-100": 0,
-        "100+": 0,
-      };
+        // Blockstream sometimes returns different shapes
+        const txs: MempoolTx[] = Array.isArray(raw)
+          ? raw
+          : Array.isArray(raw?.txs)
+          ? raw.txs
+          : [];
 
-      for (const tx of txs) {
-        const spv = satPerVByte(tx.fee, tx.vsize);
+        const buckets: Record<string, number> = {
+          "0-5": 0,
+          "6-20": 0,
+          "21-50": 0,
+          "51-100": 0,
+          "100+": 0,
+        };
 
-        if (spv <= 5) buckets["0-5"]++;
-        else if (spv <= 20) buckets["6-20"]++;
-        else if (spv <= 50) buckets["21-50"]++;
-        else if (spv <= 100) buckets["51-100"]++;
-        else buckets["100+"]++;
+        for (const tx of txs) {
+          if (!tx?.vsize) continue;
+
+          const spv = tx.fee / tx.vsize;
+
+          if (spv <= 5) buckets["0-5"]++;
+          else if (spv <= 20) buckets["6-20"]++;
+          else if (spv <= 50) buckets["21-50"]++;
+          else if (spv <= 100) buckets["51-100"]++;
+          else buckets["100+"]++;
+        }
+
+        setData(
+          Object.entries(buckets).map(([range, count]) => ({
+            range,
+            count,
+          }))
+        );
+      } catch (e) {
+        console.error("Failed to load mempool chart", e);
       }
-
-      setData(
-        Object.entries(buckets).map(([range, count]) => ({
-          range,
-          count,
-        }))
-      );
-    }
+    };
 
     load();
+
+    const interval = setInterval(load, 15000);
+    return () => clearInterval(interval);
   }, []);
 
   return (

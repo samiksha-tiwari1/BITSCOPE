@@ -12,6 +12,10 @@ import {
   Area,
 } from "recharts";
 
+type Block = {
+  tx_count?: number;
+};
+
 type ChartPoint = {
   index: number;
   txs: number;
@@ -21,24 +25,34 @@ export default function BlockChart() {
   const [data, setData] = useState<ChartPoint[]>([]);
 
   useEffect(() => {
-    async function load() {
-      const res = await fetch("https://blockstream.info/api/blocks");
-      const blocks = await res.json();
+    const load = async () => {
+      try {
+        const res = await fetch(
+          "https://blockstream.info/api/blocks",
+          { cache: "no-store" }
+        );
 
-      if (!Array.isArray(blocks)) return;
+        const raw = await res.json();
 
-      const formatted = blocks
-        .slice(0, 30)
-        .map((b, i) => ({
-          index: i,
-          txs: b.tx_count,
-        }))
-        .reverse();
+        if (!Array.isArray(raw)) return;
 
-      setData(formatted);
-    }
+        const formatted: ChartPoint[] = raw
+          .slice(0, 30)
+          .map((b: Block, i: number) => ({
+            index: i,
+            txs: b?.tx_count ?? 0,
+          }))
+          .reverse();
+
+        setData(formatted);
+      } catch (e) {
+        console.error("Failed to load block chart", e);
+      }
+    };
 
     load();
+    const interval = setInterval(load, 20000);
+    return () => clearInterval(interval);
   }, []);
 
   if (data.length === 0) return null;
@@ -50,10 +64,8 @@ export default function BlockChart() {
 
   return (
     <div className="card-elevated animate-slideUp rounded-xl p-8 mb-10 relative overflow-hidden">
-      {/* Glow background */}
       <div className="glow-bg -top-20 left-1/2 -translate-x-1/2 absolute" />
 
-      {/* Header */}
       <div className="flex justify-between items-center mb-6">
         <h3 className="cinematic-title text-2xl mb-2">
           Transaction Throughput
